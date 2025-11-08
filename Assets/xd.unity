@@ -1997,6 +1997,9 @@ MonoBehaviour:
   isDead: 0
   animator: {fileID: 0}
   deathAnimation: Death
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &72503559
 PrefabInstance:
@@ -8116,6 +8119,9 @@ MonoBehaviour:
   isDead: 0
   animator: {fileID: 0}
   deathAnimation: Death
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &314311547
 PrefabInstance:
@@ -12637,6 +12643,9 @@ MonoBehaviour:
   isDead: 0
   animator: {fileID: 0}
   deathAnimation: Death
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1 &518281066
 GameObject:
@@ -19063,6 +19072,9 @@ MonoBehaviour:
   isDead: 0
   animator: {fileID: 0}
   deathAnimation: Death
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &816723826
 PrefabInstance:
@@ -23072,6 +23084,9 @@ MonoBehaviour:
   isDead: 0
   animator: {fileID: 0}
   deathAnimation: Death
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &946182119
 PrefabInstance:
@@ -32531,6 +32546,9 @@ MonoBehaviour:
   isDead: 0
   animator: {fileID: 0}
   deathAnimation: Death
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &1404967265
 PrefabInstance:
@@ -34711,6 +34729,9 @@ MonoBehaviour:
   isDead: 0
   animator: {fileID: 0}
   deathAnimation: Death
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &1481501796
 PrefabInstance:
@@ -40734,6 +40755,9 @@ MonoBehaviour:
   isDead: 0
   animator: {fileID: 0}
   deathAnimation: Death
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &1768142249
 PrefabInstance:
@@ -43779,6 +43803,9 @@ MonoBehaviour:
   isDead: 0
   animator: {fileID: 0}
   deathAnimation: Death
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 --- !u!1001 &1906364437
 PrefabInstance:
