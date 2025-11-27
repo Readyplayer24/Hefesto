@@ -1,33 +1,47 @@
+using System.Net;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
-    public float playerSpeed;
+    public float playerSpeed = 5f;
 
     public float playerRotate;
 
-    public float jumpSpeed;
+    [Header("Movimiento")]
+    public float jumpSpeed = 7f;
+
+    [Header("Chequeo de Suelo")]
+    public Transform chkGround; 
+    public float groundCheckRadius = 0.2f;
+    public LayerMask whatIsGround;
+
+    private Rigidbody rb;
+    private bool isGrounded = false;
 
     public bool playerMove = false;
 
     public bool checkGround = true;
 
-    public Transform chkGround;
-
     public Transform atkPoint;
 
+    [Header("Combate")]
+    public float atkDamage = 25f;
     public float atkRange;
-
+    
     public LayerMask enemyLayer;
 
-    private Rigidbody rb;
+    private Animator PlayerAnim;
 
     private Vector3 displacement;
+
+    private float horizontalInput;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        PlayerAnim = GetComponentInChildren<Animator>();
     }
 
     void Start()
@@ -37,23 +51,48 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        float mh = Input.GetAxis("Horizontal");
-        PlayerMove(mh);
-        PlayerJumper();
+        rb.linearVelocity = new Vector3(horizontalInput * playerSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
+
+        if (Mathf.Abs(horizontalInput) < 0.01f)
+        {
+            rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, rb.linearVelocity.z);
+        }
+
+        if (horizontalInput < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (horizontalInput > 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+
+        PlayerMove(horizontalInput);
     }
 
     void Update()
     {
-        
+        HandleAttackInput();
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+
+        PlayerJumper();
+
+        UpdateAnimation();
     }
 
     void PlayerMove(float mh)
     {
         displacement.Set(0f, 0f, mh);
         displacement = displacement.normalized * playerSpeed * Time.deltaTime;
+
         rb.MovePosition(transform.position + displacement);
 
-        if(mh != 0f)
+        if (Mathf.Abs(mh) < 0.01f)
+        {
+            rb.linearVelocity = Vector3.zero;
+        }
+
+        if (mh != 0f)
         {
             PlayerRotate(mh);
         }
@@ -81,31 +120,47 @@ public class PlayerController : MonoBehaviour
 
     void PlayerJumper()
     {
-        Vector3 dwn = transform.TransformDirection(Vector3.down);
-        RaycastHit hit;
-
-        if (Input.GetButton("Jump") && checkGround)
+        CheckIfGrounded();
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            rb.linearVelocity = new Vector3(0f, jumpSpeed, 0f);
-            checkGround = false;
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpSpeed, rb.linearVelocity.z);
+            isGrounded = false;
         }
+    }
 
-        if (Physics.Raycast(chkGround.position, dwn, out hit, 0.2f) && hit.collider.CompareTag("Ground"))
+    void CheckIfGrounded()
+    {
+        isGrounded = Physics.CheckSphere(chkGround.position, groundCheckRadius, whatIsGround);
+    }
+
+    void UpdateAnimation()
+    {
+        PlayerAnim.SetFloat("Run", Mathf.Abs(rb.linearVelocity.x));
+    }
+
+    void HandleAttackInput()
+    {
+        if (Input.GetButtonDown("Fire1"))
         {
-            checkGround = true;
-        }
-        else
-        {
-            checkGround = false;
+            PlayerAnim.SetTrigger("atk");
+            PlayerAttack();
         }
     }
 
     public void PlayerAttack()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(atkPoint.position, atkRange, enemyLayer);
+        float atkDamage = 25f;
+        Collider[] hitColliders = Physics.OverlapSphere(atkPoint.position, atkRange);
+
         foreach (Collider hitenemy in hitColliders)
         {
             print("Atacando" + hitenemy.name);
+            Destructible destructible = hitenemy.GetComponent<Destructible>();
+            if (destructible != null)
+            {
+                destructible.TakeDamage(atkDamage);
+                continue;
+            }
         }
     }
 }
