@@ -1,4 +1,5 @@
 using System.Net;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -24,6 +25,13 @@ public class PlayerController : MonoBehaviour
     public bool checkGround = true;
 
     public Transform atkPoint;
+
+    [Header("Dash de Fuego")]
+    public float dashForce = 18f; 
+    public float dashDuration = 0.2f;
+    public float dashCooldown = 1.2f;
+    private bool isDashing = false;
+    private bool canDash = true;
 
     [Header("Combate")]
     public float atkDamage = 25f;
@@ -78,6 +86,11 @@ public class PlayerController : MonoBehaviour
         PlayerJumper();
 
         UpdateAnimation();
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Dash();
+        }
     }
 
     void PlayerMove(float mh)
@@ -162,5 +175,32 @@ public class PlayerController : MonoBehaviour
                 continue;
             }
         }
+    }
+
+    void Dash()
+    {
+        if (canDash && !isDashing)
+        {
+            canDash = false;
+            isDashing = true;
+            StartCoroutine(DashSequence());
+            Invoke("ResetDashCooldown", dashCooldown);
+        }
+    }
+
+    void ResetDashCooldown()
+    {
+        canDash = true;
+    }
+
+    IEnumerator DashSequence()
+    {
+        float dashDirection = transform.localScale.x;
+        rb.useGravity = false;
+        rb.linearVelocity = new Vector3(0, 0, dashDirection * dashForce);
+        yield return new WaitForSeconds(dashDuration);
+        rb.useGravity = true;
+        isDashing = false;
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, 0f);
     }
 }
